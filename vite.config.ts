@@ -10,9 +10,9 @@ import VueMacros from 'unplugin-vue-macros/vite'
 const lifecycle = process.env.npm_lifecycle_event
 
 export default defineConfig(async () => {
-  // const latestCommitHash = await new Promise<string>((resolve) => {
-  //   return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
-  // })
+  const latestCommitHash = await new Promise<string>((resolve) => {
+    return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
+  })
   return {
     base: './',
     envDir: 'env',
