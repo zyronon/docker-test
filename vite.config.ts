@@ -15,5 +15,8 @@ export default defineConfig(async () => {
         latestCommitHash + (process.env.NODE_ENV === 'production' ? '' : ' (dev)')
       )
     },
+    preview: {
+      port: 5555
+    }
   }
 })

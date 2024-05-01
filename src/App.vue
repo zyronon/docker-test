@@ -7,7 +7,7 @@ const gitLastCommitHash = ref(LATEST_COMMIT_HASH)
 
 <template>
   <div>
-    {{ gitLastCommitHash }}
+    gitLastCommitHash: {{ gitLastCommitHash }}
   </div>
 </template>
 
