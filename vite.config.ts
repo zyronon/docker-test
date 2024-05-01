@@ -6,12 +6,24 @@ import {Plugin as importToCDN} from 'vite-plugin-cdn-import'
 import {fileURLToPath, URL} from 'node:url'
 import {getLastCommit} from 'git-last-commit'
 import VueMacros from 'unplugin-vue-macros/vite'
+import {execSync} from 'child_process';
 
 const lifecycle = process.env.npm_lifecycle_event
 
-let latestCommitHash = ''
+const _APP_INFO_ = {
+  // SHA
+  GIT_SHA:execSync('git rev-parse --short HEAD').toString().trim(),
+  // 提交时间
+  GIT_COMMIT_DATE:execSync('git log -1 --format=%cI').toString().trim(),
+  //HASH
+  GIT_HASH:execSync('git rev-parse HEAD').toString().trim(),
+  //最后提交 message
+  GIT_LAST_COMMIT_MESSAGE:execSync('git show -s --format=%s').toString().trim()
+}
 
 export default defineConfig(async () => {
+  let latestCommitHash = ''
+
   await getLastCommit((err, commit) => {
     if (!err) {
       latestCommitHash = commit.shortHash
@@ -157,6 +169,11 @@ export default defineConfig(async () => {
       },
       assetsInlineLimit: 2048
     },
+    define: {
+      LATEST_COMMIT_HASH: JSON.stringify(
+        _APP_INFO_.GIT_HASH + (process.env.NODE_ENV === 'production' ? '' : ' (dev)')
+      )
+    },
     esbuild: {
       // drop: ['console', 'debugger']
     },
@@ -167,6 +184,9 @@ export default defineConfig(async () => {
       fs: {
         strict: false
       }
+    },
+    preview: {
+      port: 5555
     }
   }
 })
