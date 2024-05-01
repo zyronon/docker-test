@@ -2,11 +2,11 @@ import {defineConfig} from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import {getLastCommit} from 'git-last-commit'
 
-export default defineConfig(() => {
-  return new Promise(async resolve => {
-    const latestCommitHash = await new Promise<string>((resolve) => {
-      return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
-    })
+export default defineConfig(async () => {
+  const latestCommitHash = await new Promise<string>((resolve) => {
+    return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
+  })
+  return new Promise(resolve => {
     resolve({
       plugins: [
         Vue()
