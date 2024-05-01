@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 import {ref} from "vue";
 
 const gitLastCommitHash = ref(LATEST_COMMIT_HASH)
@@ -10,7 +9,6 @@ const gitLastCommitHash = ref(LATEST_COMMIT_HASH)
   <div>
     {{ gitLastCommitHash }}
   </div>
-  <HelloWorld msg="Vite + Vue"/>
 </template>
 
 <style scoped>
