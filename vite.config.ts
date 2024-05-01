@@ -1,17 +1,21 @@
-import { defineConfig, PluginOption } from 'vite'
+import {defineConfig, PluginOption} from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import { visualizer } from 'rollup-plugin-visualizer'
-import { Plugin as importToCDN } from 'vite-plugin-cdn-import'
-import { fileURLToPath, URL } from 'node:url'
-import { getLastCommit } from 'git-last-commit'
+import {visualizer} from 'rollup-plugin-visualizer'
+import {Plugin as importToCDN} from 'vite-plugin-cdn-import'
+import {fileURLToPath, URL} from 'node:url'
+import {getLastCommit} from 'git-last-commit'
 import VueMacros from 'unplugin-vue-macros/vite'
 
 const lifecycle = process.env.npm_lifecycle_event
 
+let latestCommitHash = ''
+
 export default defineConfig(async () => {
-  const latestCommitHash = await new Promise<string>((resolve) => {
-    return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
+  await getLastCommit((err, commit) => {
+    if (!err) {
+      latestCommitHash = commit.shortHash
+    }
   })
   return {
     base: './',
@@ -29,7 +33,7 @@ export default defineConfig(async () => {
       }),
       // Vue(),
       // VueJsx(),
-      lifecycle === 'report' ? (visualizer({ open: false }) as any as PluginOption) : null,
+      lifecycle === 'report' ? (visualizer({open: false}) as any as PluginOption) : null,
       importToCDN({
         modules: [
           {
@@ -105,7 +109,7 @@ export default defineConfig(async () => {
       rollupOptions: {
         // https://rollupjs.org/guide/en/#outputmanualchunks
         output: {
-          manualChunks(id, { getModuleInfo }) {
+          manualChunks(id, {getModuleInfo}) {
             const reg = /(.*)\/src\/components\/(.*)/
             if (reg.test(id)) {
               const importersLen = getModuleInfo(id)?.importers.length ?? 0
