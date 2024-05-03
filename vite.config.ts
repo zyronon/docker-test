@@ -7,6 +7,7 @@ export default defineConfig(async () => {
     return getLastCommit((err, commit) => (err ? 'unknown' : resolve(commit.shortHash)))
   })
   return {
+    base:'./',
     plugins: [
       Vue()
     ],
